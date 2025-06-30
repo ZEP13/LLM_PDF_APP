@@ -1,0 +1,404 @@
+/* Reset de base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f8;
+  color: #333;
+}
+
+/* Layout principal */
+.main {
+  display: flex;
+  gap: 20px;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Colonnes */
+.main-content,
+.pdf-viewer {
+  flex: 1;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+/* PDF Viewer */
+#pdfViewer {
+  width: 100%;
+  flex: 1;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+}
+
+/* Onglets */
+.tab-menu {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #ddd;
+}
+
+.tab-menu button {
+  flex: 1;
+  padding: 12px 0;
+  border: none;
+  background-color: transparent;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid transparent;
+}
+
+.tab-menu button:hover {
+  background-color: #f0f0f0;
+}
+
+.tab-menu button.active-tab {
+  border-bottom: 3px solid #3498db !important;
+  color: #3498db !important;
+}
+
+/* Contenus d'onglet */
+.tab-content {
+  display: none !important;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #fafafa;
+  border: 1px solid #ddd;
+  flex: 1;
+}
+
+.tab-content.active {
+  display: flex !important;
+}
+
+/* Review, Question, Test blocs */
+.review,
+.test,
+.question {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Zone de réponse IA */
+.ia-info,
+.ia-info2, 
+.ia-info3 {
+    background-color: #eef5ff;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+    margin-bottom: 5px;
+}
+
+.ia-info h1,
+.ia-info2 h1, 
+.ia-info3 h1 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+/* Input de question */
+.question-input {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.question-input input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  font-size: 15px;
+}
+
+.question-input button {
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.question-input button:hover {
+  background-color: #2980b9;
+}
+
+/* PDF viewer zone */
+.pdf-viewer h1 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.pdf-viewer p {
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+/* Style pour le bloc test */
+.testbox {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    justify-content: space-around;
+    gap: 20px;
+    position: relative;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fdfdfd;
+}
+
+/* Titres des sections */
+.eval_type h3,
+.level h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+/* Listes horizontales */
+.eval_type ul,
+.level ul {
+  list-style: none;
+  display: flex;
+  gap: 10px;
+  padding: 0;
+}
+
+/* Boutons d'évaluation */
+.eval_type button,
+.level button {
+  padding: 10px 20px;
+  background-color: #ecf0f1;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+/* Hover */
+.eval_type button:hover,
+.level button:hover {
+  background-color: #3498db;
+  color: white;
+  border-color: #2980b9;
+}
+
+/* Bouton actif (optionnel, JS à ajouter plus tard) */
+.eval_type button.selected,
+.level button.selected {
+  background-color: #2980b9;
+  color: white;
+  border-color: #2471a3;
+}
+
+.generate{
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: absolute;
+    font-size: 1.2rem;
+    bottom: 0;
+    height: 50px;
+    width: 95%;
+    margin: 20px 20px 10px 20px;
+}
+.generate:hover {
+  background-color: #2980b9;
+}
+
+/* Cache l'input file natif */
+#pdfInput {
+  display: none;
+}
+
+/* Style du bouton personnalisé */
+.custom-file-upload {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
+    text-align: center;
+}
+
+/* Hover */
+.custom-file-upload:hover {
+  background-color: #2980b9;
+}
+
+.chat-box {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fdfdfd;
+    margin-bottom: 15px;
+    max-height: 100%;
+}
+
+/* Message utilisateur */
+.chat-message.user {
+  align-self: flex-end;
+  background-color: #3498db;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 16px 16px 0 16px;
+  max-width: 70%;
+  word-wrap: break-word;
+}
+
+/* Message IA */
+.chat-message.ai {
+  align-self: flex-start;
+  background-color: #ecf0f1;
+  color: #2c3e50;
+  padding: 10px 14px;
+  border-radius: 16px 16px 16px 0;
+  max-width: 70%;
+  word-wrap: break-word;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+#resumePDFbox{
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fdfdfd;
+    max-height: 100%;
+    position: relative;
+    
+}
+.resumeBtnBox{
+    display: flex;
+    justify-content: center;
+}
+.resume{
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: absolute;
+    font-size: 1.2rem;
+    bottom: 0;
+    height: 50px;
+    width: 95%;
+    margin: 20px 20px 10px 20px;
+}
+.resume:hover {
+  background-color: #2980b9;
+}
+
+.prevent {
+  display: block;
+  background-color: #eef4fa;
+  padding: 20px 25px;
+  border-radius: 10px;
+  border-left: 5px solid #3498db;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 80px;
+  font-size: 15px;
+  color: #2c3e50;
+}
+
+.prevent h2 {
+  font-size: 22px;
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.prevent p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.prevent ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 15px;
+}
+
+.prevent ul li {
+  margin-bottom: 8px;
+  padding-left: 25px;
+  position: relative;
+  font-weight: 500;
+}
+
+.prevent ul li::before {
+  content: "✔️";
+  position: absolute;
+  left: 0;
+  color: #3498db;
+  font-size: 14px;
+}
+
+
+.resumeBox{
+    display: flex;
+    height: 100%;
+}
+/* Responsive */
+@media (max-width: 768px) {
+  .main {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .tab-menu {
+    flex-direction: column;
+  }
+
+  .tab-menu button {
+    padding: 10px;
+  }
+
+  .question-input {
+    flex-direction: column;
+  }
+
+  .question-input button {
+    width: 100%;
+  }
+}

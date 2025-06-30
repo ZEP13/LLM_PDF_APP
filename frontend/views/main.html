@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Affichage PDF</title>
+    <link rel="stylesheet" href="../styles/style.css" />
+  </head>
+  <body>
+    <!-- <nav>
+      <ul>
+        <li><a href="#">Accueil</a></li>
+        <li><a href="#">À propos</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+      <h2>Upload et affichage d'un PDF</h2>
+    </nav> -->
+    <section class="main">
+      <section class="main-content">
+        <div class="tab-menu">
+          <button onclick="showTab('review')">Review</button>
+          <button onclick="showTab('question')">Question</button>
+          <button onclick="showTab('test')">Test</button>
+        </div>
+
+        <div class="tab-content review">
+          <div id="resumePDFbox">
+            <div class="resumeBox">
+              <div class="prevent" id="preventp">
+                <h2>Bienvenue sur l'assistant PDF éducatif</h2>
+                <p>
+                  Cette application vous permet d'importer un fichier PDF
+                  contenant un cours ou un document pédagogique. Une fois le PDF
+                  chargé, l’IA extrait automatiquement les informations
+                  essentielles, en génère un résumé, répond à vos questions, et
+                  vous propose des tests pour évaluer vos connaissances.
+                </p>
+                <ul>
+                  <li>
+                    📄 <strong>Résumé :</strong> aperçu rapide du contenu du
+                    PDF.
+                  </li>
+                  <li>
+                    🤖 <strong>Questions :</strong> interagissez avec l’IA sur
+                    le contenu.
+                  </li>
+                  <li>
+                    📝 <strong>Tests :</strong> QCM ou réponses libres pour vous
+                    auto-évaluer.
+                  </li>
+                </ul>
+                <p>
+                  Commencez par importer votre document PDF dans la section à
+                  droite. L’analyse commencera automatiquement.
+                </p>
+              </div>
+            </div>
+
+            <div class="resumeBtnBox">
+              <button class="resume" id="resumeBtn" disabled>Resume PDF</button>
+            </div>
+          </div>
+        </div>
+        <div class="tab-content question">
+          <div class="ia-answer">
+            <div class="ia-info" id="iaInfo">
+              <h1>Posez votre question à l'IA</h1>
+              <p>
+                Posez une question sur le contenu du PDF et l'IA vous répondra.
+              </p>
+            </div>
+          </div>
+          <div class="chat-box" id="chatBox"></div>
+          <div class="question-input">
+            <input
+              type="text"
+              id="questionInput"
+              placeholder="Posez votre question ici..."
+            />
+            <button id="askButton" id="askButton" disabled>
+              Poser la question
+            </button>
+          </div>
+        </div>
+        <div class="tab-content test">
+          <div class="ia-info3" id="iaInfo3">
+            <h1>Quizz</h1>
+            <p>Veuillez charger un PDF afin genere un QUIZZ</p>
+          </div>
+          <div class="testbox">
+            <div class="eval_type">
+              <h3>Type d'evaluation</h3>
+              <ul>
+                <li><button>QCM</button></li>
+                <li><button>Open answer</button></li>
+              </ul>
+            </div>
+            <div class="level">
+              <h3>Level</h3>
+              <ul>
+                <li><button>College</button></li>
+                <li><button>Universite</button></li>
+              </ul>
+            </div>
+            <button class="generate" id="generateBtn" disabled>
+              Generate Quizz
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="pdf-viewer">
+        <h1 id="pdfTitle">Visualiseur de PDF</h1>
+        <p id="pdfInstruction">
+          Veuillez télécharger un fichier PDF pour l'afficher ci-dessous.
+        </p>
+        <label for="pdfInput" class="custom-file-upload">
+          📄 Choisir un PDF
+        </label>
+        <input type="file" id="pdfInput" accept="application/pdf" />
+
+        <br />
+
+        <iframe id="pdfViewer"></iframe>
+      </section>
+    </section>
+    <script src="../script/script.js"></script>
+  </body>
+</html>
