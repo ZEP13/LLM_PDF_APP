@@ -37,8 +37,11 @@ const pdfViewer = document.getElementById("pdfViewer");
 const iaInfo3 = document.getElementById("iaInfo3");
 const iaInfo = document.getElementById("iaInfo");
 const prevent = document.getElementById("preventp");
+const pdfTitle = document.getElementById("pdfTitle");
+const pdfInstruction = document.getElementById("pdfInstruction");
 
-pdfInput.addEventListener("change", () => {
+pdfInput.addEventListener("change", (event) => {
+  event.preventDefault();
   const file = pdfInput.files[0];
   if (file && file.type === "application/pdf") {
     const fileURL = URL.createObjectURL(file);
