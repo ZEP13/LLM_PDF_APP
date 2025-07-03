@@ -10,8 +10,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 pdf_summarizer = PDFSummarizer()
-chatClass = Chat()
 
+
+loaded_pdfs = {}
 app = FastAPI()
 
 app.add_middleware(
@@ -22,23 +23,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+UPLOAD_DIR = Path("../uploaded_pdfs")
+UPLOAD_DIR.mkdir(exist_ok=True)
+
 @app.post("/upload-pdf/")
 async def upload_pdf(file: UploadFile = File(...)):
-
-    UPLOAD_DIR = Path("../uploaded_pdfs")
-    UPLOAD_DIR.mkdir(exist_ok=True)
-
     file_path = UPLOAD_DIR / file.filename
-
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
+        
+    chat_instance  = Chat()
+    chat_instance.setup_qa_systeme(str(file_path))
+    loaded_pdfs[file.filename] = chat_instance
 
     return {"filename": file.filename, "message": "Fichier reçu avec succès"}
 
 
 @app.get("/resume")
 async def resume_pdf(level_prompt: int,filename: str = Query(...)):
-    UPLOAD_DIR = Path("../uploaded_pdfs")
     file_path = UPLOAD_DIR / filename
     
     if not file_path.exists():
@@ -50,14 +52,14 @@ async def resume_pdf(level_prompt: int,filename: str = Query(...)):
 
 
 
-@app.post('/chat/')
-async def chatia(message_user: str, filename: str = Query(...)):
-    UPLOAD_DIR = Path("../uploaded_pdfs")
-    file_path = UPLOAD_DIR / filename
+@app.post("/chat/")
+async def chatia(question_user: str, filename: str = Query(...)):
+    if filename not in loaded_pdfs:
+        return {"error": f"Fichier '{filename}' non chargé. Upload d'abord le PDF."}
 
-    if not file_path.exists():
-        return{"error": "fichier non trouver"}
-    
-    chat = chatClass.setup_qa_systeme(file_path, message_user)
-
-    return {"AI answer": chat['output_text']}
+    try:
+        chat_instance = loaded_pdfs[filename]
+        response = chat_instance.chat(question_user)
+        return {"AI_answer": response}
+    except Exception as e:
+        return {"error": str(e)}
