@@ -59,6 +59,7 @@
               <button
                 class="resume"
                 id="resumeBtn"
+                type="button"
                 disabled
                 onclick="resumePDF()"
               >
@@ -83,7 +84,13 @@
               id="questionInput"
               placeholder="Posez votre question ici..."
             />
-            <button id="askButton" id="askButton" disabled>
+            <button
+              class="askButton"
+              id="askButton"
+              type="button"
+              onclick="chat()"
+              disabled
+            >
               Poser la question
             </button>
           </div>
@@ -108,7 +115,7 @@
                 <li><button>Universite</button></li>
               </ul>
             </div>
-            <button class="generate" id="generateBtn" disabled>
+            <button class="generate" id="generateBtn" type="button" disabled>
               Generate Quizz
             </button>
           </div>
@@ -130,7 +137,7 @@
         <iframe id="pdfViewer"></iframe>
       </section>
     </section>
-    <script src="../script/script.js"></script>
     <script src="../script/connectAPI.js"></script>
+    <script src="../script/script.js"></script>
   </body>
 </html>

@@ -2,21 +2,30 @@ import os
 from langchain.chains.summarize import load_summarize_chain
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_ollama import OllamaLLM
+from langchain_core.prompts import PromptTemplate
 
 
-def summarize_pdf(file_path):
-    loader = PyPDFLoader(file_path)
-    docs = loader.load_and_split()
-    model = OllamaLLM(model='llama3.1')
 
-    chain = load_summarize_chain(model, chain_type='map_reduce')
-    summary = chain.invoke(docs)
+prompt = [
+    """Résume ce document de façon simple et classique. Reste strictement fidèle au contenu du PDF.""",
+    """Résume ce document pour un collégien. Indique à chaque fois où tu as trouvé l'information dans le PDF (ex : page ou paragraphe).""",
+    """Fais un résumé universitaire très complet et structuré. Sois détaillé, rigoureux et spécifie à chaque fois l’origine des propos (page/paragraphe du PDF)."""
+]
 
-    return summary
+class PDFSummarizer:
+    def __init__(self, model_name="llama3.1"):
+        self.model = OllamaLLM(model=model_name)
 
-if __name__ == "__main__":
-    print(summarize_pdf('backend/CV_2024_2.pdf'))
+    def summarize_pdf(self, file_path, prompt_style):
 
-    print('\n')
-    summarize = summarize_pdf('backend/CV_2024_2.pdf')
-    print('resume: ',summarize['output_text'])
+        prompt_template = PromptTemplate.from_template(prompt[prompt_style] + "\n\n{text}")
+
+        chain = load_summarize_chain(self.model, chain_type='stuff', prompt=prompt_template)
+
+
+        
+        loader = PyPDFLoader(file_path)
+        docs = loader.load_and_split()
+        summary = chain.invoke(docs)
+        return summary
+

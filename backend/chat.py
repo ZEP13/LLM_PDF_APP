@@ -12,38 +12,41 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 load_dotenv()
 
 
+class Chat():
+    def __init__(self,model_name="llama3.1"):
 
-def setup_qa_systeme(file_path):
-    loader = PyPDFLoader(file_path)
-    docs = loader.load_and_split()
+        self.model = OllamaLLM(model=model_name)
 
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-    chunks = text_splitter.split_documents(docs)
+    def setup_qa_systeme(self, file_path, message_user):
+        loader = PyPDFLoader(file_path)
+        docs = loader.load_and_split()
 
-    embeddings = OllamaEmbeddings(model='llama3.1')
-    vector_store = FAISS.from_documents(chunks, embeddings)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+        chunks = text_splitter.split_documents(docs)
 
-    retriever = vector_store.as_retriever()
-    model = OllamaLLM(model='llama3.1')
+        embeddings = OllamaEmbeddings(self.model)
+        vector_store = FAISS.from_documents(chunks, embeddings)
 
-    qa_chain = RetrievalQA.from_chain_type(model, retriever=retriever)
+        retriever = vector_store.as_retriever()
 
-    return qa_chain
+        qa_chain = RetrievalQA.from_chain_type(self.model, retriever=retriever)
+
+        return qa_chain
 
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    qa_chain = setup_qa_systeme('CV_2024_2.pdf')
+#     qa_chain = setup_qa_systeme('CV_2024_2.pdf')
 
-    while True:
-        question = input("\n Ask question: ")
-        if question.lower() == "exit":
-             break
-        answer= qa_chain.invoke(question)
+#     while True:
+#         question = input("\n Ask question: ")
+#         if question.lower() == "exit":
+#              break
+#         answer= qa_chain.invoke(question)
 
-        print('reponse:')
-        print(answer['result'])
+#         print('reponse:')
+#         print(answer['result'])
 
 
 

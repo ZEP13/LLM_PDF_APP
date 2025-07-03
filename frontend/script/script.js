@@ -40,8 +40,7 @@ const prevent = document.getElementById("preventp");
 const pdfTitle = document.getElementById("pdfTitle");
 const pdfInstruction = document.getElementById("pdfInstruction");
 
-pdfInput.addEventListener("change", (event) => {
-  event.preventDefault();
+pdfInput.addEventListener("change", () => {
   const file = pdfInput.files[0];
   if (file && file.type === "application/pdf") {
     const fileURL = URL.createObjectURL(file);
@@ -87,15 +86,6 @@ document.getElementById("askButton").addEventListener("click", async () => {
   input.value = "";
 
   chatBox.scrollTop = chatBox.scrollHeight;
-
-  // Appel à l’API (mock ou réel)
-  const response = await askModel(question);
-
-  // Ajouter le message IA
-  const aiMsg = document.createElement("div");
-  aiMsg.className = "chat-message ai";
-  aiMsg.textContent = response;
-  chatBox.appendChild(aiMsg);
 
   chatBox.scrollTop = chatBox.scrollHeight;
 });
