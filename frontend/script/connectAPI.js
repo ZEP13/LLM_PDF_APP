@@ -3,8 +3,7 @@ let uploadedFilename = null;
 
 document
   .getElementById("pdfInput")
-  .addEventListener("change", async function (e) {
-    e.preventDefault(); // prevents default behavior (if any)
+  .addEventListener("change", async function () {
     const file = this.files[0];
     if (!file) return;
 
@@ -18,13 +17,17 @@ document
       });
 
       if (!response.ok) {
-        console.error("Upload failed");
+        const errText = await response.text();
+        console.error("Échec de l'upload :", errText);
         return;
       }
 
       const data = await response.json();
       uploadedFilename = data.filename;
       console.log("PDF upload: ", data);
+
+      // const fileURL = URL.createObjectURL(file);
+      // document.getElementById("pdfViewer").src = fileURL;
     } catch (err) {
       console.error("Upload error:", err);
     }
@@ -37,30 +40,42 @@ async function resumePDF() {
     return;
   }
 
-  const reponse = await fetch(
-    `http://localhost:8000/resume?filename=${encodeURIComponent(
-      uploadedFilename
-    )}`
-  );
-  if (!reponse.ok) {
-    console.log("aucun fichier selectionne pdf");
+  document.getElementById("resumeLevel").style.display = "none";
+
+  // Obtenir la valeur sélectionnée
+  const level_prompt = document.querySelector(
+    'input[name="resumeNiveau"]:checked'
+  )?.value;
+
+  if (!level_prompt) {
+    alert("Veuillez sélectionner un niveau de résumé.");
     return;
   }
 
-  const data = await reponse.json();
-  console.log("resume :", data);
+  const response = await fetch(
+    `http://localhost:8000/resume?level=${encodeURIComponent(
+      level_prompt
+    )}&filename=${encodeURIComponent(uploadedFilename)}`
+  );
+
+  if (!response.ok) {
+    console.log("Erreur lors de la génération du résumé PDF");
+    return;
+  }
+
+  const data = await response.json();
+  console.log("Résumé :", data);
 }
 
 //ask ia about pdf details
-
 async function chat() {
   message = document.getElementById("questionInput").value;
 
   console.log(message);
 
-  const reponse = fetch(`http://localhost:8000/chat/`, {
+  const reponse = await fetch(`http://localhost:8000/chat/`, {
     method: "POST",
-    body: { message, uploadedFilename },
+    body: message,
   });
 
   if (!reponse.ok) {

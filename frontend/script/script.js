@@ -39,6 +39,7 @@ const iaInfo = document.getElementById("iaInfo");
 const prevent = document.getElementById("preventp");
 const pdfTitle = document.getElementById("pdfTitle");
 const pdfInstruction = document.getElementById("pdfInstruction");
+const radiodiv = document.getElementById("resumeLevel");
 
 pdfInput.addEventListener("change", () => {
   const file = pdfInput.files[0];
@@ -50,6 +51,7 @@ pdfInput.addEventListener("change", () => {
     iaInfo3.style.display = "none";
     iaInfo.style.display = "none";
     prevent.style.display = "none";
+    radiodiv.style.display = "flex";
     //Active les boutons pour quizz et chat
     document.getElementById("askButton").disabled = false;
     document.getElementById("generateBtn").disabled = false;
@@ -63,6 +65,7 @@ pdfInput.addEventListener("change", () => {
     document.getElementById("resumeBtn").disabled = true;
     iaInfo3.style.display = "block";
     iaInfo.style.display = "block";
+    radiodiv.style.display = "none";
     prevent.style.display = "block";
   }
 });

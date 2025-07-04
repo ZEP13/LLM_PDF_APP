@@ -7,7 +7,8 @@ from resume import PDFSummarizer
 from chat import Chat
 from fastapi.middleware.cors import CORSMiddleware
 
-
+from fastapi.responses import FileResponse
+from fastapi import HTTPException
 
 pdf_summarizer = PDFSummarizer()
 
@@ -17,7 +18,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # or set to your frontend URL
+    allow_origins=["*"],  # frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -32,12 +33,18 @@ async def upload_pdf(file: UploadFile = File(...)):
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
         
-    chat_instance  = Chat()
-    chat_instance.setup_qa_systeme(str(file_path))
-    loaded_pdfs[file.filename] = chat_instance
+    # chat_instance  = Chat()
+    # chat_instance.setup_qa_systeme(str(file_path))
+    # loaded_pdfs[file.filename] = chat_instance
 
     return {"filename": file.filename, "message": "Fichier reçu avec succès"}
 
+@app.get("/get-pdf/{filename}")
+async def get_pdf(filename: str):
+    file_path = UPLOAD_DIR / filename
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="Fichier non trouvé")
+    return FileResponse(path=file_path, media_type="application/pdf")
 
 @app.get("/resume")
 async def resume_pdf(level_prompt: int,filename: str = Query(...)):
@@ -46,10 +53,8 @@ async def resume_pdf(level_prompt: int,filename: str = Query(...)):
     if not file_path.exists():
         return{"error": "fichier non trouver"}
     
-    summary = pdf_summarizer.summarize_pdf(file_path, level_prompt)
+    summary = pdf_summarizer.summarize_pdf(file_path, level_prompt-1)
     return {"resume": summary['output_text']}
-
-
 
 
 @app.post("/chat/")
