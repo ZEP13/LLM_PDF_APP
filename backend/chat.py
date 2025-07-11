@@ -28,15 +28,19 @@ class Chat():
         embeddings = OllamaEmbeddings(model='llama3.1') 
         vector_store = FAISS.from_texts(texts, embeddings)  
 
-        self.retriever = vector_store.as_retriever()
+        self.retriever = vector_store.as_retriever(search_kwargs={"k": 5})
 
 
         self.template = """
             You are an assistant answering questions based on a PDF.
 
-            If the answer is not in the PDF, reply:
-            "The PDF doesn't have the information to answer this question."
+            Only if you're sure the answer is not in the PDF, then respond:
+            "The PDF doesn't contain enough information to answer this question."
+            Otherwise, provide the most accurate answer possible using the given context.
 
+            Structure la réponse en HTML vivant : utilise des balises <ul>, <ol>, <li> pour les listes, <p> pour les paragraphes, <h2>/<h3> pour les titres, et ajoute des alinéas (text-indent) pour les paragraphes. Mets en valeur les mots importants avec <strong> ou <em>.
+            Ajoute des listes à puces ou numérotées pour les points clés.
+                        
             Conversation history:
             {history}
 
@@ -45,16 +49,14 @@ class Chat():
 
             Question:
             {question}
+
+
         """
 
 
         self.prompt = ChatPromptTemplate.from_template(self.template)
 
-        self.chain = RetrievalQA.from_chain_type(llm=self.model, retriever=self.retriever)
-
     def chat(self, question_user: str) -> str:
-        if not self.chain:
-            raise ValueError("La chaîne QA n'est pas initialisée. Appelle setup_qa_systeme d'abord.")
         
         docs = self.retriever.invoke(question_user)
         context = "\n".join([doc.page_content for doc in docs])

@@ -66,6 +66,8 @@ pdfInput.addEventListener("change", () => {
     iaInfo.style.display = "block";
     radiodiv.style.display = "none";
     prevent.style.display = "block";
+    document.getElementById("resumeBox").value = "";
+    document.getElementById("chatBox").value = "";
   }
 });
 

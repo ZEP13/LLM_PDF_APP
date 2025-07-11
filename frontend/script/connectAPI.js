@@ -6,6 +6,11 @@ document
   .addEventListener("change", async function () {
     const file = this.files[0];
     if (!file) return;
+    // Réinitialise le résumé, le chat et réaffiche le choix de résumé
+    document.getElementById("resumeBox").innerHTML = "";
+    document.getElementById("chatBox").innerHTML = "";
+    document.getElementById("resumeLevel").style.display = "flex";
+    document.getElementById("resumeBtnBox").style.display = "flex";
 
     // Envoi du PDF au backend
     const formData = new FormData();
@@ -40,7 +45,7 @@ async function resumePDF() {
   }
 
   document.getElementById("resumeLevel").style.display = "none";
-
+  document.getElementById("resumeBtnBox").style.display = "none";
   // Obtenir la valeur sélectionnée
   const level_prompt = document.querySelector(
     'input[name="resumeNiveau"]:checked'
@@ -63,7 +68,8 @@ async function resumePDF() {
   }
 
   const data = await response.json();
-  console.log("Résumé :", data);
+  const resumeText = data.resume || "";
+  document.getElementById("resumeBox").innerHTML = resumeText;
 }
 
 //ask ia about pdf details
@@ -102,7 +108,7 @@ async function chat() {
   const aiMsg = document.createElement("div");
   aiMsg.className = "chat-message ai";
   // Affiche la réponse AI proprement
-  aiMsg.textContent =
+  aiMsg.innerHTML =
     reponseAI.AI_answer || reponseAI.error || JSON.stringify(reponseAI);
   chatBox.appendChild(aiMsg);
 }
