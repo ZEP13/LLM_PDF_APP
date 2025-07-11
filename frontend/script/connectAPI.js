@@ -7,6 +7,7 @@ document
     const file = this.files[0];
     if (!file) return;
 
+    // Envoi du PDF au backend
     const formData = new FormData();
     formData.append("file", file);
 
@@ -24,10 +25,8 @@ document
 
       const data = await response.json();
       uploadedFilename = data.filename;
+      console.log("uploadedFilename:", uploadedFilename);
       console.log("PDF upload: ", data);
-
-      // const fileURL = URL.createObjectURL(file);
-      // document.getElementById("pdfViewer").src = fileURL;
     } catch (err) {
       console.error("Upload error:", err);
     }
@@ -53,7 +52,7 @@ async function resumePDF() {
   }
 
   const response = await fetch(
-    `http://localhost:8000/resume?level=${encodeURIComponent(
+    `http://localhost:8000/resume?level_prompt=${encodeURIComponent(
       level_prompt
     )}&filename=${encodeURIComponent(uploadedFilename)}`
   );
@@ -69,13 +68,27 @@ async function resumePDF() {
 
 //ask ia about pdf details
 async function chat() {
-  message = document.getElementById("questionInput").value;
+  const message = document.getElementById("questionInput").value;
+  const chatBox = document.getElementById("chatBox");
+
+  if (!uploadedFilename) {
+    alert("Aucun fichier PDF n'a été uploadé.");
+    return;
+  }
+  if (!message) {
+    alert("Veuillez entrer une question.");
+    return;
+  }
 
   console.log(message);
 
-  const reponse = await fetch(`http://localhost:8000/chat/`, {
+  // Envoyer la question et le nom du fichier en query string
+  const url = `http://localhost:8000/chat/?question_user=${encodeURIComponent(
+    message
+  )}&filename=${encodeURIComponent(uploadedFilename)}`;
+
+  const reponse = await fetch(url, {
     method: "POST",
-    body: message,
   });
 
   if (!reponse.ok) {
@@ -88,6 +101,8 @@ async function chat() {
 
   const aiMsg = document.createElement("div");
   aiMsg.className = "chat-message ai";
-  aiMsg.textContent = reponseAI;
+  // Affiche la réponse AI proprement
+  aiMsg.textContent =
+    reponseAI.AI_answer || reponseAI.error || JSON.stringify(reponseAI);
   chatBox.appendChild(aiMsg);
 }

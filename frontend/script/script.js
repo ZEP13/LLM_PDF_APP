@@ -32,7 +32,6 @@ document
     });
   });
 
-const pdfInput = document.getElementById("pdfInput");
 const pdfViewer = document.getElementById("pdfViewer");
 const iaInfo3 = document.getElementById("iaInfo3");
 const iaInfo = document.getElementById("iaInfo");

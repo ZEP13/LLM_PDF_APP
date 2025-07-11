@@ -33,9 +33,9 @@ async def upload_pdf(file: UploadFile = File(...)):
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
         
-    # chat_instance  = Chat()
-    # chat_instance.setup_qa_systeme(str(file_path))
-    # loaded_pdfs[file.filename] = chat_instance
+    chat_instance  = Chat()
+    chat_instance.setup_qa_systeme(str(file_path))
+    loaded_pdfs[file.filename] = chat_instance
 
     return {"filename": file.filename, "message": "Fichier reçu avec succès"}
 
@@ -47,7 +47,7 @@ async def get_pdf(filename: str):
     return FileResponse(path=file_path, media_type="application/pdf")
 
 @app.get("/resume")
-async def resume_pdf(level_prompt: int,filename: str = Query(...)):
+async def resume_pdf(level_prompt: int,filename: str = Query(...)): #attend dans l'URL (query string)
     file_path = UPLOAD_DIR / filename
     
     if not file_path.exists():
