@@ -1,20 +1,21 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Query, HTTPException
 from typing import Union
 from pathlib import Path
 import shutil
 from fastapi import Query
 from resume import PDFSummarizer
 from chat import Chat
+from evalpdf import QCM
 from fastapi.middleware.cors import CORSMiddleware
-
+import json
 from fastapi.responses import FileResponse
 from fastapi import HTTPException
 
 pdf_summarizer = PDFSummarizer()
 
-
 loaded_pdfs = {}
 app = FastAPI()
+qcm_generator = QCM() 
 
 app.add_middleware(
     CORSMiddleware,
@@ -66,5 +67,27 @@ async def chatia(question_user: str, filename: str = Query(...)):
         chat_instance = loaded_pdfs[filename]
         response = chat_instance.chat(question_user)
         return {"AI_answer": response}
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.get("/qcm")
+async def generate_qcm(filename: str, levelqcm: int, typeqcm: int = Query(...)):
+    file_path = UPLOAD_DIR / filename
+    
+    if not file_path.exists():
+        return {"error": f"Fichier '{filename}' non trouvé."}
+
+    try:
+        # Appel de la méthode QCM
+        qcm_response = qcm_generator.qcm(str(file_path), levelqcm, typeqcm)
+
+        # On essaie de parser le JSON retourné par le modèle
+        try:
+            qcm_data = json.loads(qcm_response)
+            
+        except json.JSONDecodeError:
+            return {"error": "Réponse du modèle invalide. JSON non parsable."}
+
+        return {"QCM": qcm_data}
     except Exception as e:
         return {"error": str(e)}

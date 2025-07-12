@@ -130,22 +130,37 @@
             <h1>Quizz</h1>
             <p>Veuillez charger un PDF afin genere un QUIZZ</p>
           </div>
-          <div class="testbox">
-            <div class="eval_type">
-              <h3>Type d'evaluation</h3>
-              <ul>
-                <li><button>QCM</button></li>
-                <li><button>Open answer</button></li>
-              </ul>
+          <div class="testbox" id="testBox">
+            <div class="eval_type" id="eval_type">
+              <h3>Type d'évaluation</h3>
+              <label
+                ><input type="radio" name="typeqcm" value="1" />
+                connaissance</label
+              ><br />
+              <label
+                ><input type="radio" name="typeqcm" value="2" /> compréhension,
+                application</label
+              >
             </div>
-            <div class="level">
+
+            <div class="level" id="level">
               <h3>Level</h3>
-              <ul>
-                <li><button>College</button></li>
-                <li><button>Universite</button></li>
-              </ul>
+              <label
+                ><input type="radio" name="levelqcm" value="1" /> Collège</label
+              ><br />
+              <label
+                ><input type="radio" name="levelqcm" value="2" />
+                Université</label
+              >
             </div>
-            <button class="generate" id="generateBtn" type="button" disabled>
+
+            <button
+              class="generate"
+              id="generateBtn"
+              type="button"
+              disabled
+              onclick="generateQCM()"
+            >
               Generate Quizz
             </button>
           </div>

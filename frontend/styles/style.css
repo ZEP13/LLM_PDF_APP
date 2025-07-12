@@ -49,6 +49,19 @@ body {
   border-bottom: 2px solid #ddd;
 }
 
+.question-block {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.correction {
+  margin-top: 5px;
+  font-style: italic;
+}
+
+
 .tab-menu button {
   flex: 1;
   padding: 12px 0;
@@ -160,6 +173,7 @@ body {
     display: flex;
     flex-direction: row;
     height: 100%;
+    overflow: auto;
     justify-content: space-around;
     gap: 20px;
     position: relative;
@@ -228,6 +242,19 @@ body {
     width: 95%;
     margin: 20px 20px 10px 20px;
 }
+
+#corrigerBtn{
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    position: absolute;
+    font-size: 1.2rem;
+    height: 50px;
+    width: 95%;
+    margin: 20px 20px 10px 20px;
+}
 .generate:hover {
   background-color: #2980b9;
 }
@@ -275,7 +302,7 @@ body {
   align-self: flex-end;
   background-color: #3498db;
   color: white;
-  padding: 10px 14px;
+  padding: 10px 20px;
   border-radius: 16px 16px 0 16px;
   max-width: 70%;
   word-wrap: break-word;
